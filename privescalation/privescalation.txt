@@ -1,0 +1,15 @@
+- Briefly explain the vulnerability and why the secure version prevents the vulnerability:
+
+The vulnerability in the insecure version is due to the fact that it doesn't actually authenticate users. It just accepts a `userId` in the request body and trusts that the user is who they claim to be. This means that any user can spoof an admin by submitting `userId: 1` in the request and gain access to admin-only features like changing roles. There’s no session or login process — it’s all based on trust, which is dangerous.
+
+The secure version fixes this by using session-based authentication. When a user logs in, their ID is stored in the session, and authorization is done using that session ID, not the request body. So, even if someone tries to spoof another user’s ID, it won’t work because the server checks the session, not the input. Only users who are logged in and actually have the "admin" role in the session are allowed to change roles.
+
+
+- What additional security mechanisms can you incorporate to prevent such attacks?
+
+- Use authentication middleware to require login before accessing sensitive routes.
+- Implement role-based access control (RBAC) so that permissions are managed centrally and consistently.
+- Add logging and audit trails to record actions like role changes — useful for detecting abuse and improving accountability (non-repudiation).
+- Use multi-factor authentication (MFA) for admin users to add an extra layer of protection.
+- Validate all inputs, and never trust data sent by the client when making security decisions.
+- Use CSRF protection tokens for all sensitive POST requests to prevent unauthorized actions from other sites.
