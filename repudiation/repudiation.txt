@@ -1,2 +1,14 @@
-- Briefly explain the vulnerability and why the secure version is better at preventing repudiation than the insecure version.
+- Briefly explain the vulnerability and why the secure version is better at preventing repudiation than the insecure version:
+
+The vulnerability in the insecure version is that there’s no way to track or verify who performed actions on the server. Anyone can send a message using any username, and the server doesn't authenticate or log the request. This makes it impossible to trace actions back to a specific user or even IP address — meaning users can deny (repudiate) their actions without any evidence to the contrary.
+
+The secure version addresses this by logging every incoming request with timestamps, user information (if available), and IP addresses. It also logs when messages are sent and when errors occur. These logs are saved to a persistent `server.log` file, which can later be used to verify or investigate actions — essentially supporting non-repudiation. Even though full authentication isn't implemented yet, the logging mechanism is a big step forward in holding users accountable.
+
 - What additional security mechanisms can you incorporate to prevent such attacks?
+
+- Add user authentication (e.g., username/password or tokens) so that each action is tied to a verified identity.
+- Include user IDs or session data in every log entry to make tracking even more precise.
+- Implement digital signatures on messages or actions to prove authorship and integrity.
+- Use access control mechanisms to limit who can perform sensitive operations like message sending or retrieval.
+- Encrypt and protect logs using integrity checks to ensure logs themselves can't be tampered with.
+- Periodically audit logs to detect unusual behavior or possible tampering.
